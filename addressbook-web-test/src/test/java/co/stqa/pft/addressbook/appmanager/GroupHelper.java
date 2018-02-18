@@ -33,6 +33,10 @@ public class GroupHelper extends BaseHelper {
     click(By.name("new"));
   }
 
+  public void initGroupModification(){
+    click(By.name("edit"));
+  }
+
   public void deleteSelectedGroups() {
     click(By.name("delete"));
   }
@@ -41,5 +45,9 @@ public class GroupHelper extends BaseHelper {
     if (!wd.findElement(By.name("selected[]")).isSelected()) {
       click(By.name("selected[]"));
     }
+  }
+
+  public void submitGroupModification() {
+    click(By.name("update"));
   }
 }
