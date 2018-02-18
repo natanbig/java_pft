@@ -50,4 +50,8 @@ public class GroupHelper extends BaseHelper {
   public void submitGroupModification() {
     click(By.name("update"));
   }
+
+  public void submitContactModification() {
+    click(By.name("update"));
+  }
 }

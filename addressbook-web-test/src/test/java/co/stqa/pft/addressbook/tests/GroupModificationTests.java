@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 /**
  * Created by natan.radostin on 2/18/2018.
  */
-public class GroupModificationTest extends TestBase {
+public class GroupModificationTests extends TestBase {
 
 
   @Test
