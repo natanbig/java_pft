@@ -1,21 +1,31 @@
 package co.stqa.pft.addressbook.appmanager;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.WebDriver;
 
 /**
  * Created by natan.radostin on 2/17/2018.
  */
-public class NavigationManager extends BaseHelper {
+public class NavigationManager extends HelperBase {
 
-  public NavigationManager(FirefoxDriver wd) {
+  public NavigationManager(WebDriver wd) {
     super(wd);
   }
 
   public void gotoGroupPage() {
-    click(By.linkText("groups"));
+    if(isElementPresent(By.tagName("h1"))
+            && wd.findElement(By.tagName("h1")).getText().equals("Groups")
+            && isElementPresent(By.name("new"))){
+      return;
+    }
+
+      click(By.linkText("groups"));
+
   }
   public void gotoHomePage(){
+    if(isElementPresent(By.id("maintable"))) {
+      return;
+    }
     click(By.linkText("home"));
   }
 }

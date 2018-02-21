@@ -1,9 +1,11 @@
 package co.stqa.pft.addressbook.appmanager;
 
-import co.stqa.pft.addressbook.model.ContactData;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.BrowserType;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -11,36 +13,46 @@ import java.util.concurrent.TimeUnit;
  */
 public class ApplicationManager {
   private NavigationManager navigationManager;
-  private ContactHelper contactHelper;
-  FirefoxDriver wd;
-  private  GroupHelper groupHelper;
-  private  SessionHelper sessionHelper;
+  private ContactHelperBase contactHelper;
+  WebDriver wd;
+  private GroupHelperBase groupHelper;
+  private SessionHelperBase sessionHelper;
+  private String browser;
 
+  public ApplicationManager(String browser) {
+    this.browser = browser;
+  }
 
 
   public void init() {
-    wd = new FirefoxDriver();
-    wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+
+    if (browser.equals(BrowserType.FIREFOX)) {
+      wd = new FirefoxDriver();
+    } else if (browser.equals(BrowserType.CHROME)) {
+      wd = new ChromeDriver();
+    } else if (browser.equals(BrowserType.IE)) {
+      wd = new InternetExplorerDriver();
+    }
+    wd.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
     wd.get("http://localhost/addressbook/group.php");
-    groupHelper = new GroupHelper(wd);
-    contactHelper = new ContactHelper(wd);
+    groupHelper = new GroupHelperBase(wd);
+    contactHelper = new ContactHelperBase(wd);
     navigationManager = new NavigationManager(wd);
-    sessionHelper = new SessionHelper(wd);
+    sessionHelper = new SessionHelperBase(wd);
     sessionHelper.login("admin", "secret");
 
   }
-
 
 
   public void stop() {
     wd.quit();
   }
 
-  public GroupHelper getGroupHelper() {
+  public GroupHelperBase getGroupHelper() {
     return groupHelper;
   }
 
-  public ContactHelper getContactHelper() {
+  public ContactHelperBase getContactHelper() {
     return contactHelper;
   }
 
@@ -48,7 +60,7 @@ public class ApplicationManager {
     return navigationManager;
   }
 
-  public SessionHelper getSessionHelper() {
+  public SessionHelperBase getSessionHelper() {
     return sessionHelper;
   }
 }
