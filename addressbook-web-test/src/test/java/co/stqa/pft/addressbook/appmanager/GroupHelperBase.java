@@ -3,6 +3,10 @@ package co.stqa.pft.addressbook.appmanager;
 import co.stqa.pft.addressbook.model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by natan.radostin on 2/17/2018.
@@ -41,19 +45,15 @@ public class GroupHelperBase extends HelperBase {
     click(By.name("delete"));
   }
 
-  public void selectGroup() {
-    if (!wd.findElement(By.name("selected[]")).isSelected()) {
-      click(By.name("selected[]"));
-    }
+  public void selectGroup(int index) {
+    wd.findElements(By.name("selected[]")).get(index).click();
   }
 
   public void submitGroupModification() {
     click(By.name("update"));
   }
 
-  public void submitContactModification() {
-    click(By.name("update"));
-  }
+
 
   public void createGroup(GroupData groupData) {
     initGroupCreation();
@@ -64,5 +64,21 @@ public class GroupHelperBase extends HelperBase {
 
   public boolean isThereGroup() {
     return isElementPresent(By.name(("selected[]")));
+  }
+
+  public int getGroupCount() {
+    return wd.findElements(By.name("selected[]")).size();
+  }
+
+  public List<GroupData> getGroupList() {
+    List<GroupData> groups =  new ArrayList<>();
+    List<WebElement> elements = wd.findElements(By.cssSelector("span.group"));
+    for (WebElement element:elements){
+      String name =element.getText();
+      int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
+      GroupData group = new GroupData(id,name,null,null);
+      groups.add(group);
+    }
+    return groups;
   }
 }
